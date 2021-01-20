@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Company disc</title>
+</head>
+<body>
+    <div style="text-align: center; width: 100%">
+        <h1><img width="40px" src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif"/> Company Dashboard <img width="40px" src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif"/></h1>
+    </div>
+    <div>
+        <h2>Files</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Uploaded</th>
+                <th>Size</th>
+                <th>Download</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="file : ${files}">
+                <td th:text="${file.fileName}"></td>
+                <td th:text="${file.timestamp}"></td>
+                <td th:text="${file.size}"></td>
+                <td><a th:href="@{/files/${file.fileId}/${file.fileName}">Download</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
