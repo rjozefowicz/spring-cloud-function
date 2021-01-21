@@ -4,7 +4,7 @@ public class FileDTO {
 
     private String fileName;
     private long size;
-    private long timestamp;
+    private String uploadDate;
     private String fileId;
     private String[] tags;
 
@@ -24,12 +24,12 @@ public class FileDTO {
         this.size = size;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public String getUploadDate() {
+        return uploadDate;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setUploadDate(String uploadDate) {
+        this.uploadDate = uploadDate;
     }
 
     public String getFileId() {

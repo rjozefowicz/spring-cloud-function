@@ -38,7 +38,7 @@ public class FileRepository {
         return amazonS3.listObjects(bucketName).getObjectSummaries().stream().map(s3ObjectSummary -> {
             FileDTO dto = new FileDTO();
             dto.setSize(s3ObjectSummary.getSize());
-            dto.setTimestamp(s3ObjectSummary.getLastModified().getTime());
+            dto.setUploadDate(s3ObjectSummary.getLastModified().toString());
             String[] parts = s3ObjectSummary.getKey().split("/");
             dto.setFileId(parts[0]);
             dto.setFileName(parts[1]);

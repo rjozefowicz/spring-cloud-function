@@ -1,11 +1,15 @@
 package dev.jozefowicz.workshop.companydisc.web;
 
-import com.amazonaws.util.IOUtils;
 import dev.jozefowicz.workshop.companydisc.domain.FileRepository;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,20 +30,23 @@ public class FileController {
 
     @GetMapping
     public String listFiles(Model model) {
-        // model.addAttribute("files", fileRepository.listAll());
+        model.addAttribute("files", fileRepository.listAll());
         return "index";
     }
 
     @CrossOrigin(origins = "*")
     @PostMapping("/files")
-    public void upload(@RequestParam("file") MultipartFile file) throws IOException {
+    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
         fileRepository.upload(file);
+        return "redirect:/";
     }
 
     @GetMapping("/files/{fileId}/{fileName}")
-    public byte[] download(String fileId, String fileName) throws IOException {
+    public ResponseEntity<Resource> download(@PathVariable String fileId, @PathVariable String fileName) throws IOException {
         final InputStream inputStream = fileRepository.download(fileId, fileName);
-        return IOUtils.toByteArray(inputStream);
+        Resource resource = new InputStreamResource(inputStream);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + fileName + "\"").body(resource);
     }
 
 }

@@ -9,22 +9,31 @@
         <h1><img width="40px" src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif"/> Company Dashboard <img width="40px" src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif"/></h1>
     </div>
     <div>
-        <h2>Files</h2>
+        <h2>Upload new file</h2>
+        <div>
+            <form method="POST" enctype="multipart/form-data" action="/files">
+                <table>
+                    <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+                    <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+                </table>
+            </form>
+        </div>
+        <h2>Uploaded Files</h2>
         <table>
             <thead>
             <tr>
                 <th>Name</th>
-                <th>Uploaded</th>
-                <th>Size</th>
+                <th>Uploaded time</th>
+                <th>Size in KB</th>
                 <th>Download</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="file : ${files}">
                 <td th:text="${file.fileName}"></td>
-                <td th:text="${file.timestamp}"></td>
-                <td th:text="${file.size}"></td>
-                <td><a th:href="@{/files/${file.fileId}/${file.fileName}">Download</a></td>
+                <td th:text="${file.uploadDate}"></td>
+                <td th:text="${file.size / 1024}"></td>
+                <td><a th:href="@{/files/{fileId}/{fileName}(fileId=${file.fileId}, fileName=${file.fileName})}">Download</a></td>
             </tr>
             </tbody>
         </table>
