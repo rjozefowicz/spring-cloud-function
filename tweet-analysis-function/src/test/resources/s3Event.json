@@ -1,0 +1,14 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "company-disc-rj"
+        },
+        "object": {
+          "key": "19a5e926-1537-48a5-8cb5-a490bb6e39f8/2-min.jpg"
+        }
+      }
+    }
+  ]
+}

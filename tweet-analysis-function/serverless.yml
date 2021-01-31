@@ -1,0 +1,34 @@
+service: tweet-analysis-function
+frameworkVersion: '2'
+
+plugins:
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  runtime: java11
+  region: eu-west-1
+
+package:
+  artifact: target/tweet-analysis-function-1.0-SNAPSHOT-aws.jar
+
+functions:
+  tweet-analysis:
+    handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+    timeout: 60
+    memorySize: 1024
+    environment:
+      SPRING_CLOUD_FUNCTION_DEFINITION: textAnalysisFunction
+      TWEETS_TABLE_NAME: company-disc-rj
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:*
+        Resource: "arn:aws:dynamodb:eu-west-1:093271654888:table/company-disc-rj"
+      - Effect: "Allow"
+        Action:
+          - comprehend:*
+        Resource: "*"
+    events:
+    - stream: arn:aws:dynamodb:eu-west-1:093271654888:table/company-disc-rj/stream/2021-01-31T03:12:45.243
+
