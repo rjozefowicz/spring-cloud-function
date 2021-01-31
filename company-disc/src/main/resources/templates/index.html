@@ -26,6 +26,7 @@
                 <th>Uploaded time</th>
                 <th>Size in KB</th>
                 <th>Download</th>
+                <th>Tags</th>
             </tr>
             </thead>
             <tbody>
@@ -34,9 +35,25 @@
                 <td th:text="${file.uploadDate}"></td>
                 <td th:text="${file.size / 1024}"></td>
                 <td><a th:href="@{/files/{fileId}/{fileName}(fileId=${file.fileId}, fileName=${file.fileName})}">Download</a></td>
+                <td><span th:each="tag : ${file.tags}" th:text="${tag}"></span> </td>
             </tr>
             </tbody>
         </table>
     </div>
+<div>
+    <h2>Wall</h2>
+    <form action="#" th:action="@{/tweets}" th:object="${tweet}" method="post">
+        <p>Title: <input type="text" th:field="*{title}" /></p>
+        <p>Message: <input type="text" th:field="*{body}" /></p>
+        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+    </form>
+    <table>
+        <tbody>
+        <tr th:each="tweet : ${tweets}">
+            <td th:text="${tweet.title}"></td>
+            <td th:text="${tweet.body}"></td>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

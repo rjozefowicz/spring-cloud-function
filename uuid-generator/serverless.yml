@@ -1,0 +1,23 @@
+service: tweet-analysis-function
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: java11
+  region: eu-west-1
+
+package:
+  artifact: target/uuid-generator-1.0-SNAPSHOT.jar
+
+functions:
+  uuid-generator:
+    handler: dev.jozefowicz.uuidgenerator.UUIDGenerator
+    timeout: 30
+    memorySize: 1024
+    environment:
+      PREFIX: "some prefix"
+    events:
+      - http:
+          method: get
+          cors: true
+          path: "/"

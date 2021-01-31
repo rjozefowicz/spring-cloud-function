@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -36,18 +37,22 @@ public class FileRepository {
 
     public List<FileDTO> listAll() {
         return amazonS3.listObjects(bucketName).getObjectSummaries().stream().map(s3ObjectSummary -> {
-            FileDTO dto = new FileDTO();
-            dto.setSize(s3ObjectSummary.getSize());
-            dto.setUploadDate(s3ObjectSummary.getLastModified().toString());
             String[] parts = s3ObjectSummary.getKey().split("/");
-            dto.setFileId(parts[0]);
-            dto.setFileName(parts[1]);
-            final ObjectMetadata objectMetadata = amazonS3.getObjectMetadata(bucketName, s3ObjectSummary.getKey());
-            if (tagsSupported && objectMetadata.getUserMetadata().containsKey("tags")) {
-                dto.setTags(objectMetadata.getUserMetadata().get("tags").split(","));
+            if (parts.length == 2) {
+                FileDTO dto = new FileDTO();
+                dto.setSize(s3ObjectSummary.getSize());
+                dto.setUploadDate(s3ObjectSummary.getLastModified().toString());
+                dto.setFileId(parts[0]);
+                dto.setFileName(parts[1]);
+                final ObjectMetadata objectMetadata = amazonS3.getObjectMetadata(bucketName, s3ObjectSummary.getKey());
+                if (tagsSupported && objectMetadata.getUserMetadata().containsKey("tags")) {
+                    dto.setTags(objectMetadata.getUserMetadata().get("tags").split(","));
+                }
+                return dto;
+            } else {
+                return null;
             }
-            return dto;
-        }).collect(Collectors.toList());
+        }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 }
