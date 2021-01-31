@@ -1,4 +1,4 @@
-service: tweet-analysis-function
+service: uuid-generator
 frameworkVersion: '2'
 
 provider:
@@ -14,10 +14,3 @@ functions:
     handler: dev.jozefowicz.uuidgenerator.UUIDGenerator
     timeout: 30
     memorySize: 1024
-    environment:
-      PREFIX: "some prefix"
-    events:
-      - http:
-          method: get
-          cors: true
-          path: "/"
